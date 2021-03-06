@@ -2,9 +2,9 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import './assets/main.css';
+import DashboardLayout from "./layouts/DashboardLayout.vue";
+import EmptyLayout from "./layouts/EmptyLayout.vue";
 
-import DashboardLayout from './components/DashboardLayout.vue';
-import EmptyLayout from './components/EmptyLayout.vue';
 
 const app = createApp(App);
 

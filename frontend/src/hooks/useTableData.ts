@@ -1,4 +1,5 @@
 import { ref } from 'vue';
+import getPrices from "./tiingo/tiingo-api";
 
 export interface ISimpleTableData {
   city: string;

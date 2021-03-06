@@ -2,42 +2,13 @@
   <div>
     <h3 class="text-gray-700 text-3xl font-medium">Tables</h3>
 
-    <div class="mt-4">
-      <h4 class="text-gray-600">Simple Table</h4>
-
-      <div class="mt-6">
-        <div class="bg-white shadow rounded-md overflow-hidden my-6">
-          <table class="text-left w-full border-collapse">
-            <thead class="border-b">
-              <tr>
-                <th
-                  class="py-3 px-5 bg-indigo-800 font-medium uppercase text-sm text-gray-100"
-                >
-                  City
-                </th>
-                <th
-                  class="py-3 px-5 bg-indigo-800 font-medium uppercase text-sm text-gray-100"
-                >
-                  Total orders
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(i, index) in simpleTableData"
-                :key="index"
-                class="hover:bg-gray-200"
-              >
-                <td class="py-4 px-6 border-b text-gray-700 text-lg">
-                  {{ i.city }}
-                </td>
-                <td class="py-4 px-6 border-b text-gray-500">
-                  {{ i.totalOrders }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+    <div>
+      <button @click="getUsers">try again</button>
+      <div v-if="isLoading"> Loading ... </div>
+      <div v-else="error"> {{ error.message }} <button @click="getUsers">try again</button> </div>
+      <div v-else>
+        <div v-for="item in data.value"></div>
+        {{ item }}
       </div>
     </div>
 
@@ -330,12 +301,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineComponent, ref} from "vue";
 
-import { useTableData } from "../hooks/useTableData";
+import {useTableData} from "../hooks/useTableData";
+import getPrices from "../hooks/tiingo/tiingo-api";
 
 export default defineComponent({
   setup() {
+    const isLoading = ref(false);
+    const error = ref(null);
+    const data = ref(null);
+    const getUsers = async () => {
+      isLoading.value = true;
+      try {
+        data.value = await getPrices();
+        console.log(data);
+        isLoading.value = false;
+      } catch (e) {
+        error.value = e;
+      }
+    };
+
     const {
       simpleTableData,
       paginatedTableData,
@@ -346,6 +332,10 @@ export default defineComponent({
       simpleTableData,
       paginatedTableData,
       wideTableData,
+      isLoading,
+      error,
+      data,
+      getUsers
     };
   },
 });
