@@ -11,6 +11,7 @@ import Card from './views/Card.vue'
 import Test from './views/Test.vue'
 import NotFound from './views/Error404.vue'
 import Profile from './views/modules/Auth/Profile.vue'
+import Details from "./views/Details.vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -61,6 +62,11 @@ const routes: RouteRecordRaw[] = [
     path      : '/test',
     name      : 'Test',
     component : Test,
+  },
+  {
+    path      : '/details/:ticker',
+    name      : 'Details',
+    component : Details,
   },
   {
     path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound

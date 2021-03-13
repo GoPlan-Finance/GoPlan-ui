@@ -24,28 +24,28 @@ app.component('EmptyLayout', EmptyLayout)
 app.provide('$authStore', authStore)
 
 
-// @todo move to router.ts
-router.beforeEach(async (to, _, next) => {
-
-  // const {authStore} = inject('$authStore')
-  if (to.meta && to.meta.requiresAuth === false) {
-    next()
-    return
-  }
-
-  if (await authStore.isAuthenticated() !== true) {
-    next({name: 'auth'})
-    return
-  }
-  // const currentUser = await authStore.currentUser()
-  // if (currentUser.isOnboardingCompleted() && to.name !== 'create-account') {
-  //   next({name: 'profile'})
-  //
-  //   return
-  // }
-
-  next()
-})
+// // @todo move to router.ts
+// router.beforeEach(async (to, _, next) => {
+//
+//   // const {authStore} = inject('$authStore')
+//   if (to.meta && to.meta.requiresAuth === false) {
+//     next()
+//     return
+//   }
+//
+//   if (await authStore.isAuthenticated() !== true) {
+//     next({name: 'auth'})
+//     return
+//   }
+//   // const currentUser = await authStore.currentUser()
+//   // if (currentUser.isOnboardingCompleted() && to.name !== 'create-account') {
+//   //   next({name: 'profile'})
+//   //
+//   //   return
+//   // }
+//
+//   next()
+// })
 
 
 app.use(router)
