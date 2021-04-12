@@ -28,10 +28,7 @@
   <a href="#license">License</a>
 </p>
 
-
-![screenshot](https://github.com/GoPlan-Finance/GoPlan-app/raw/master/.github/screenshoot-goplan.png)
-
-
+<img width="1627" alt="dashboard-with-bg" src="https://user-images.githubusercontent.com/35574021/114449648-49987680-9bd5-11eb-81c4-943f07cd576c.png">
 
 # Roadmap 
 
