@@ -9,6 +9,7 @@ import { sleep } from '/@common/utils'
 import * as dayjs from 'dayjs'
 
 import * as weekOfYear from 'dayjs/plugin/weekOfYear'
+import { EOD } from './EOD'
 import { FMP } from './FMP'
 import * as Types from './types'
 
@@ -27,13 +28,19 @@ const providers : Array<Types.DataProviderInterface> = []
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 for (const provider : ProviderConfigInterface of global.weHateGlobals_dataProviders) {
+
   if (provider.name.toLowerCase() === 'fmp') {
     providers.push(new FMP(provider.apiKey))
+  }
+  if (provider.name.toLowerCase() === 'eod') {
+    providers.push(
+      new EOD(provider.apiKey))
   }
 }
 
 
 export type ProviderSymbols = { [key : string] : Types.AssetSymbol[] }
+export type ProviderExchanges = { [key : string] : Types.Exchange[] }
 
 
 class GlobalProvider {
@@ -99,7 +106,7 @@ class GlobalProvider {
   }
 
 
-  private static async callOne (method : string, ...args : IArguments[]) {
+  private static async callOne (method : string, ...args : any[]) {
 
     for (const provider of providers) {
 
@@ -116,7 +123,7 @@ class GlobalProvider {
     throw `DataProvider method "${method as string} is not supported by any providers ...`
   }
 
-  private static async callAll (method : string, ...args : IArguments[]) {
+  private static async callAll (method : string, ...args : any[]) {
 
     const data = {}
     for (const provider of providers) {
@@ -190,9 +197,20 @@ class GlobalProvider {
     return Object.values(output)
   }
 
+
+  async searchSymbols (query : string) : Promise<ProviderSymbols> {
+    return await GlobalProvider.callAll('searchSymbols', query)
+  }
+
+
   async fetchSupportedSymbols () : Promise<ProviderSymbols> {
 
     return await GlobalProvider.callAll('fetchSupportedSymbols')
+  }
+
+  async fetchSupportedExchanges () : Promise<ProviderExchanges> {
+
+    return await GlobalProvider.callAll('fetchSupportedExchanges')
   }
 
   async getSymbolTimeSeriesData (
@@ -235,7 +253,7 @@ class GlobalProvider {
     const provider = GlobalProvider.getProviderFor(assetSymbol)
     return GlobalProvider.handleThrottle(provider, async () => {
       return await provider.getCompanyProfile(
-        assetSymbol.symbol,
+        assetSymbol.tickerName,
       )
 
     })
@@ -256,7 +274,7 @@ class GlobalProvider {
   }
 
   async getCompanyQuotes (
-    providerName: string,
+    providerName : string,
     assetSymbols : AssetSymbol[],
   ) : Promise<Types.CompanyQuote[]> {
 

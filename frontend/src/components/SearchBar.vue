@@ -16,16 +16,17 @@ export default defineComponent({
     const {push} = useRouter()
 
     const _assetSymbol : AssetSymbol = ref(null)
-    const assetSymbol : AssetSymbol  = computed({
+    const assetSymbol                = computed({
       get () {
         return _assetSymbol
       },
       set (symbol : AssetSymbol) {
         _assetSymbol.value = symbol
+
         push({
           name   : 'ticker_details',
           params : {
-            ticker: symbol.symbol,
+            ticker: symbol.tickerName,
           },
         })
       },

@@ -29,12 +29,20 @@ import * as Types from '../types'
 
 export class FMP implements Types.DataProviderInterface {
 
-  private config : FMPApi.Configuration
+  private readonly config : FMPApi.Configuration
 
   constructor (apiKey : string) {
     this.config = new FMPApi.Configuration({
       apiKey,
     })
+  }
+
+  searchSymbols (query: string): Promise<Types.AssetSymbol[]> {
+    throw new Error('Method not implemented.')
+  }
+
+  fetchSupportedExchanges () : Promise<Types.Exchange[]> {
+    throw new Error('Method not implemented.')
   }
 
   private static handleError (error : AxiosError) : void {
@@ -157,41 +165,42 @@ export class FMP implements Types.DataProviderInterface {
 
   async getCompanyProfiles (symbol : string[]) : Promise<Types.CompanyProfile[]> {
 
+    throw 'to be updated'
     const api = new FMPApi.CompanyValuationApi(this.config)
 
     const response = await api.profile(symbol.join(','))
 
-    return response.data.map(profile => {
-
-      profile.fullTimeEmployees = typeof profile.fullTimeEmployees === 'string' ? Number.parseInt(profile.fullTimeEmployees) : null
-
-      const maybeNull = (value : StringKeys<Types.CompanyProfile>) => {
-        const val = profile[value] && String(profile[value]).length ? profile[value] as string : null
-
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        profile[value] = val
-      }
-
-      maybeNull('companyName')
-      maybeNull('ceo')
-      maybeNull('currency')
-      maybeNull('description')
-      maybeNull('website')
-      maybeNull('ipoDate')
-      maybeNull('image')
-      maybeNull('zip')
-      maybeNull('industry')
-      maybeNull('sector')
-      maybeNull('phone')
-      maybeNull('address')
-      maybeNull('country')
-      maybeNull('state')
-      maybeNull('city')
-
-
-      return profile
-    })
+    // return response.data.map(profile => {
+    //
+    //   profile.fullTimeEmployees = typeof profile.fullTimeEmployees === 'string' ? Number.parseInt(profile.fullTimeEmployees) : null
+    //
+    //   const maybeNull = (value : StringKeys<Types.CompanyProfile>) => {
+    //     const val = profile[value] && String(profile[value]).length ? profile[value] as string : null
+    //
+    //     eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //     @ts-ignore
+    // profile[value] = val
+    // }
+    //
+    // maybeNull('companyName')
+    // maybeNull('ceo')
+    // maybeNull('currency')
+    // maybeNull('description')
+    // maybeNull('website')
+    // maybeNull('ipoDate')
+    // maybeNull('image')
+    // maybeNull('zip')
+    // maybeNull('industry')
+    // maybeNull('sector')
+    // maybeNull('phone')
+    // maybeNull('address')
+    // maybeNull('country')
+    // maybeNull('state')
+    // maybeNull('city')
+    //
+    //
+    // return profile
+    // })
   }
 
   async getCompanyQuotes (symbol : string[]) : Promise<Types.CompanyQuote[]> {

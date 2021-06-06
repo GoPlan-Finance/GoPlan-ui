@@ -21,8 +21,8 @@
           href="#"
           @click.prevent="selectElement(symbol)"
         >
-          <div class="w-14 min-w-min">{{ symbol.get('symbol') }}</div>
-          <div class="text-gray-500 text-sm">{{ symbol.get('name') }}</div>
+          <div class="w-14 min-w-min">{{ symbol.tickerName }}</div>
+          <div class="text-gray-500 text-sm">{{ symbol.name }}</div>
         </a>
       </li>
     </ul>
@@ -32,22 +32,21 @@
 <script lang="ts">
 
 import { AssetSymbol } from '/@common/models'
-import { Query } from '/@common/Query'
 import SearchField from '/@components/base/SearchField.vue'
 import { computed, defineComponent, reactive, ref, watch } from 'vue'
 
 
 const getSymbols = async (tickerName : string) : Promise<AssetSymbol[]> => {
-  if (tickerName.length < 2) {
+  if (tickerName.length === 0) {
     return []
   }
 
-  const q = new Query(AssetSymbol)
-  q.startsWith('symbol', tickerName.toUpperCase())
-  q.limit(10)
-  //q.include(['exchange.name'])
 
-  return await q.find()
+  return Parse.Cloud.run('Assets--Search', {
+    query: tickerName,
+  })
+
+
 }
 
 export default defineComponent({
@@ -62,7 +61,7 @@ export default defineComponent({
       default : false,
     },
     modelValue: {
-      required  : true,
+      required  : false,
       validator : prop => prop instanceof AssetSymbol || typeof prop === 'string' || prop === null || prop === undefined,
     },
     searchFieldClass: {
@@ -82,7 +81,7 @@ export default defineComponent({
     watch(() => props.modelValue, () => {
 
       if (props.modelValue instanceof AssetSymbol) {
-        tickerName.value = props.modelValue.symbol
+        tickerName.value = props.modelValue.tickerName
       } else if (typeof props.modelValue === 'string') {
         tickerName.value = props.modelValue
       }
@@ -93,7 +92,7 @@ export default defineComponent({
         return
       }
 
-      if (props.modelValue && tickerName.value === props.modelValue.symbol) {
+      if (props.modelValue && tickerName.value === props.modelValue.tickerName) {
         symbols.data = []
         return
       }
@@ -133,7 +132,7 @@ export default defineComponent({
       }
 
       symbols.data     = []
-      tickerName.value = symbol ? symbol.symbol : ''
+      tickerName.value = symbol ? symbol.tickerName : ''
       isOpen.value     = false
       emit('update:modelValue', symbol)
     }

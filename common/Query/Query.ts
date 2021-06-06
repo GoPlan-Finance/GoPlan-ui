@@ -5,15 +5,16 @@
  */
 import { BaseObject } from '/@common/models/base/BaseObject'
 import { SecureObject } from '/@common/models/base/SecureObject'
+import { Mutex } from 'async-mutex'
 
 
 export type LiveQueryUpdateFnEventType = null | 'updated' | 'created' | 'deleted'
 export type LiveQueryUpdateFn<T> = (obj : T, event : LiveQueryUpdateFnEventType) => void
-type Constructible<T> = (new (...args : any[]) => T)
+export type Constructible<T> = (new (...args : any[]) => T)
 
 
-interface PointerInterface {
-  __type : 'Pointer'
+export interface PointerInterface {
+  __type : string | 'Pointer'
   className : string
   objectId : string
 }
@@ -21,6 +22,7 @@ interface PointerInterface {
 
 export class Query<T extends BaseObject> extends Parse.Query<T> {
 
+  static objectCreationMutexes : Record<string, Mutex> = {}
   objectClass : Constructible<T> = null
 
   constructor (objectClass : Constructible<T>) {
@@ -57,7 +59,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
         const val = object.get(include)
 
         if (val && val.__type === 'Pointer') {
-          debugger
+
           const obj = await Parse.Object.extend(val.className).createWithoutData(val.objectId).fetch()
 
           object.set(include, obj)
@@ -191,14 +193,14 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
     ] of Object.entries(params)) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      query.equalTo(k, v)
+      this.equalTo(k, v)
     }
 
     return this.find(BaseObject.useMasterKey(useMasterKey))
   }
 
-  public async findOneBy (
-    params : { [key : string] : string | boolean | number | BaseObject | Parse.Pointer },
+  public async findOneBy<K extends Extract<keyof T, string>> (
+    params : Partial<Pick<T, K>> | T,
     useMasterKey = false,
   ) : Promise<T | undefined> {
 
@@ -218,28 +220,51 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
     return new this.objectClass()
   }
 
-  public async findOrCreate (
-    params : { [key : string] : string | boolean | number | BaseObject | Parse.Pointer },
+  private getCreateMutex () : Mutex {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    let mutex = Query.objectCreationMutexes[this.objectClass.className]
+
+    if (!mutex) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      mutex = Query.objectCreationMutexes[this.objectClass.className] = new Mutex()
+    }
+
+    return mutex
+  }
+
+
+  public  async findOrCreate<K extends Extract<keyof T, string>> (
+    params : Partial<Pick<T, K>> | T,
     useMasterKey = false,
     save         = true,
+    createParams : Partial<Pick<T, K>> | T  | undefined = undefined,
   ) : Promise<T> {
 
-    const obj = await this.findOneBy(params, useMasterKey)
+    const mutex = this.getCreateMutex()
 
-    if (obj) {
-      return obj
-    }
+    return await mutex.runExclusive(async () => {
+      const obj = await this.findOneBy(params, useMasterKey)
 
-    const obj2 = this.createObject()
+      if (obj) {
+        return obj
+      }
 
-    obj2.set(params)
+      const obj2 = this.createObject()
 
-    if (!save) {
-      return obj2
-    }
+      obj2.set(params)
 
+      if (createParams !== undefined) {
+        obj2.set(createParams)
+      }
 
-    return obj2.save(null, BaseObject.useMasterKey(useMasterKey)) as Promise<T>
+      if (!save) {
+        return obj2
+      }
+
+      return obj2.save(null, BaseObject.useMasterKey(useMasterKey)) as Promise<T>
+    })
   }
 
   public async get (objectId : string, options? : Parse.Query.GetOptions) : Promise<T> {

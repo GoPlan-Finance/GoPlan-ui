@@ -8,6 +8,7 @@ import { Query } from '/@common/Query'
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable prefer-rest-params */
 import * as CryptoJS from 'crypto-js'
+import { Constructible, PointerInterface } from './Query'
 
 type CacheItemType<T> = { [key : string] : Promise<T> }
 type HandlerFn<T> = () => Promise<T>
@@ -16,6 +17,10 @@ type HandlerFn<T> = () => Promise<T>
 export class CacheableQuery<T extends BaseObject> extends Query<T> {
 
   private static CACHE : unknown = {}
+
+  static create<U extends BaseObject> (objectClass : Constructible<U>) : CacheableQuery<U> {
+    return new CacheableQuery<U>(objectClass)
+  }
 
   public  async findBy (
     params : { [key : string] : string | boolean | number | BaseObject | Parse.Pointer },
@@ -27,8 +32,8 @@ export class CacheableQuery<T extends BaseObject> extends Query<T> {
     })
   }
 
-  public  async findOneBy (
-    params : { [key : string /* StringKeys<T>*/] : string | boolean | number | BaseObject | Parse.Pointer },
+  public async findOneBy<K extends Extract<keyof T, string>> (
+    params : Partial<Pick<T, K>> | T,
     useMasterKey = false,
   ) : Promise<T | undefined> {
 
@@ -37,18 +42,20 @@ export class CacheableQuery<T extends BaseObject> extends Query<T> {
     })
   }
 
-  public  async findOrCreate (
-    params : { [key : string] : string | boolean | number | BaseObject | Parse.Pointer },
+  public  async findOrCreate<K extends Extract<keyof T, string>> (
+    params : Partial<Pick<T, K>> | T,
     useMasterKey = false,
+    save         = true,
+    createParams : Partial<Pick<T, K>> | T  | undefined = undefined,
   ) : Promise<T> {
 
     return this.handleCache<T>('findOrCreate', arguments, () => {
-      return super.findOrCreate(params, useMasterKey)
+      return super.findOrCreate(params, useMasterKey, save, createParams)
     })
   }
 
   public  async getObjectById (
-    docId : string,
+    docId : string | PointerInterface | T,
     useMasterKey = false,
   ) : Promise<T> {
 
@@ -75,7 +82,7 @@ export class CacheableQuery<T extends BaseObject> extends Query<T> {
 
     const hash = CryptoJS.MD5(methodName + JSON.stringify(params)).toString()
 
-    if (CACHE[hash]) {
+    if (CACHE[hash] /* if previous query returned null or undefined, we will do the query again */) {
       return CACHE[hash] as Promise<U>
     }
 

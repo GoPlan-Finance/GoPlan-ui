@@ -2,6 +2,30 @@
   <code_scheme name="Project" version="173">
     <option name="LINE_SEPARATOR" value="&#10;" />
     <option name="FORMATTER_TAGS_ENABLED" value="true" />
+    <DBN-PSQL>
+      <case-options enabled="false">
+        <option name="KEYWORD_CASE" value="lower" />
+        <option name="FUNCTION_CASE" value="lower" />
+        <option name="PARAMETER_CASE" value="lower" />
+        <option name="DATATYPE_CASE" value="lower" />
+        <option name="OBJECT_CASE" value="preserve" />
+      </case-options>
+      <formatting-settings enabled="false" />
+    </DBN-PSQL>
+    <DBN-SQL>
+      <case-options enabled="false">
+        <option name="KEYWORD_CASE" value="lower" />
+        <option name="FUNCTION_CASE" value="lower" />
+        <option name="PARAMETER_CASE" value="lower" />
+        <option name="DATATYPE_CASE" value="lower" />
+        <option name="OBJECT_CASE" value="preserve" />
+      </case-options>
+      <formatting-settings enabled="false">
+        <option name="STATEMENT_SPACING" value="one_line" />
+        <option name="CLAUSE_CHOP_DOWN" value="chop_down_if_statement_long" />
+        <option name="ITERATION_ELEMENTS_WRAPPING" value="chop_down_if_not_single" />
+      </formatting-settings>
+    </DBN-SQL>
     <HTMLCodeStyleSettings>
       <option name="HTML_ATTRIBUTE_WRAP" value="0" />
       <option name="HTML_TEXT_WRAP" value="0" />
@@ -34,30 +58,6 @@
       <option name="SPACE_BETWEEN_TERNARY_QUEST_AND_COLON" value="true" />
       <option name="NAMESPACE_BRACE_STYLE" value="2" />
     </PHPCodeStyleSettings>
-    <DBN-PSQL>
-      <case-options enabled="false">
-        <option name="KEYWORD_CASE" value="lower" />
-        <option name="FUNCTION_CASE" value="lower" />
-        <option name="PARAMETER_CASE" value="lower" />
-        <option name="DATATYPE_CASE" value="lower" />
-        <option name="OBJECT_CASE" value="preserve" />
-      </case-options>
-      <formatting-settings enabled="false" />
-    </DBN-PSQL>
-    <DBN-SQL>
-      <case-options enabled="false">
-        <option name="KEYWORD_CASE" value="lower" />
-        <option name="FUNCTION_CASE" value="lower" />
-        <option name="PARAMETER_CASE" value="lower" />
-        <option name="DATATYPE_CASE" value="lower" />
-        <option name="OBJECT_CASE" value="preserve" />
-      </case-options>
-      <formatting-settings enabled="false">
-        <option name="STATEMENT_SPACING" value="one_line" />
-        <option name="CLAUSE_CHOP_DOWN" value="chop_down_if_statement_long" />
-        <option name="ITERATION_ELEMENTS_WRAPPING" value="chop_down_if_not_single" />
-      </formatting-settings>
-    </DBN-SQL>
     <TypeScriptCodeStyleSettings version="0">
       <option name="USE_SEMICOLON_AFTER_STATEMENT" value="false" />
       <option name="FORCE_SEMICOLON_STYLE" value="true" />
@@ -77,9 +77,6 @@
       <option name="IMPORT_SORT_MODULE_NAME" value="true" />
       <option name="IMPORT_PREFER_ABSOLUTE_PATH" value="TRUE" />
     </TypeScriptCodeStyleSettings>
-    <XML>
-      <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
-    </XML>
     <codeStyleSettings language="HTML">
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />

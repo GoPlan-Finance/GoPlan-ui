@@ -61,7 +61,7 @@ export default defineComponent({
 
     onBeforeMount(async () => {
 
-      const info = await AssetProfile.fetchBySymbol(props.assetSymbol)
+      const info : AssetProfile = await AssetProfile.fetchProfile(props.assetSymbol)
 
       data.info = info
 
@@ -72,7 +72,7 @@ export default defineComponent({
         },
         {
           label : 'symbol',
-          data  : info.symbol.symbol,
+          data  : info.symbol.tickerName,
         },
         // {
         //   label : 'isin',
@@ -103,10 +103,10 @@ export default defineComponent({
           label : 'full_time_employees',
           data  : info.fullTimeEmployees,
         },
-        {
-          label : 'ceo',
-          data  : info.ceo,
-        },
+        // {
+        //   label : 'ceo',
+        //   data  : info.ceo,
+        // },
         {
           type  : 'url',
           label : 'website',

@@ -99,12 +99,7 @@ export abstract class SecureObject extends BaseObject {
     return await Crypto.encrypt(SecureObject.sessionDerivedKey, val)
   }
 
-
-  async save (
-    target : SecureObject | Array<SecureObject | Parse.File> = undefined,
-    options : Parse.RequestOptions                           = undefined,
-  ) : Promise<this> {
-
+  private async encrypt () {
     for (const [
       fieldName, isDirty
     ] of Object.entries(this._dirtyCache)) {
@@ -117,7 +112,14 @@ export abstract class SecureObject extends BaseObject {
 
       super.set(fieldName, await SecureObject.encryptField(value))
     }
+  }
 
+  async save (
+    target : SecureObject | Array<SecureObject | Parse.File> = undefined,
+    options : Parse.RequestOptions                           = undefined,
+  ) : Promise<this> {
+
+    await this.encrypt()
 
     const savedObject = await super.save(target, options)
 
@@ -185,6 +187,20 @@ export abstract class SecureObject extends BaseObject {
     return setValue(key as string, value)
   }
 
+
+  public static async saveAll<T extends readonly Parse.Object[]> (
+    list : T,
+    options? : Parse.Object.SaveAllOptions,
+  ) : Promise<T> {
+
+    for (const obj of list) {
+      if (obj instanceof SecureObject) {
+        await obj.encrypt()
+      }
+    }
+
+    return super.saveAll(list, options)
+  }
 
 }
 

@@ -1,7 +1,7 @@
-import { requiresAuthentication, schema } from './base/defaults'
+import { Migrations } from 'parse-server'
 
 
-export default schema('WatchlistItem', {
+export default Migrations.makeSchema('WatchlistItem', {
   fields: {
     createdBy : {type: 'Pointer', targetClass: '_User'},
     symbol    : {type: 'Pointer', targetClass: 'AssetSymbol', required: true},
@@ -12,7 +12,7 @@ export default schema('WatchlistItem', {
     symbol    : {symbol: 1},
   },
   classLevelPermissions: {
-    ...requiresAuthentication([
+    ...Migrations.requiresAuthentication([
       'find', 'get', 'update', 'create', 'delete', 'count',
     ]),
   },

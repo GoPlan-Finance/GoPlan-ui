@@ -1,7 +1,7 @@
-import { requiresAuthentication, schema } from './base/defaults'
+import { Migrations } from 'parse-server'
 
 
-export default schema('AssetProfile', {
+export default Migrations.makeSchema('AssetProfile', {
   fields: {
     symbol   : {type: 'Pointer', targetClass: 'AssetSymbol', required: true},
     exchange : {type: 'Pointer', targetClass: 'StockExchange', required: true},
@@ -24,24 +24,13 @@ export default schema('AssetProfile', {
     website           : {type: 'String'},
     fullTimeEmployees : {type: 'Number'},
     description       : {type: 'String'},
-    ceo               : {type: 'String'},
-
-    // price: number;
-    // beta?: number;
-    // volAvg?: number;
-    // mktCap?: number;
-    // lastDiv?: number;
-    // range?: string;
-    // changes?: number;
-    // isin?: string;
-    // cusip?: string;
   },
   indexes: {
     symbol: {symbol: 1},
 
   },
   classLevelPermissions: {
-    ...requiresAuthentication([
+    ...Migrations.requiresAuthentication([
       'find', 'get',
     ]),
 

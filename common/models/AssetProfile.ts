@@ -92,26 +92,23 @@ export class AssetProfile extends BaseObject {
     return this.get('ceo')
   }
 
-  static fetchBySymbol (
+  static async fetchProfile (
     symbol : AssetSymbol,
   ) : Promise<AssetProfile> {
 
-    const q = new CacheableQuery(this)
+    const profilePointer = await Parse.Cloud.run('Assets--GetProfile', {assetSymbolId: symbol.id}) as Parse.Pointer
 
-
-    q.equalTo('symbol', symbol)
-
-    q.include([
-      'exchange',
-      'industry',
-      'symbol',
-      'industry',
-      'sector',
-      'addressRegion',
-    ])
-
-
-    return q.first()
+    return CacheableQuery.create(this)
+      .equalTo('symbol', symbol)
+      .include([
+        'exchange',
+        'industry',
+        'symbol',
+        'industry',
+        'sector',
+        'addressRegion',
+      ])
+      .first()
   }
 
 

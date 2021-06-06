@@ -128,11 +128,11 @@ export default defineComponent({
     })
 
     data.open.rows   = computed(() => {
-      console.debug('Holdings Computed(open)')
+      // console.debug('Holdings Computed(open)')
       return holdingStore.holdings.filter(row => row.openQty !== 0)
     })
     data.closed.rows = computed(() => {
-      console.debug('Holdings Computed(closed)')
+      // console.debug('Holdings Computed(closed)')
       return holdingStore.holdings.filter(row => row.openQty === 0)
     })
 

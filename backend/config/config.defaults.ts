@@ -20,13 +20,13 @@ export default {
 
   dataProviders: [
     {
-      name   : 'fmp',
+      name   : 'eod',
       apiKey : '',
     },
-    {
-      name   : 'yahoo',
-      apiKey : '',
-    }
+    // {
+    //   name   : 'yahoo',
+    //   apiKey : '',
+    // }
 
   ]
 }

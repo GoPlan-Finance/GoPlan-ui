@@ -23,14 +23,14 @@
       >
         <AppLink
           v-if="row.symbol"
-          :ticker="row.symbol.symbol"
+          :ticker="row.symbol.tickerName"
           class="font-bold overflow-hidden overflow-ellipsis"
           to="ticker_details"
         >
-          {{ row.symbol.symbol }}
+          {{ row.symbol.tickerName }}
         </AppLink>
         <span v-else>
-          {{ row.symbol.symbol }}
+          {{ row.symbol.tickerName }}
         </span>
       </template>
 
@@ -39,7 +39,7 @@
       >
         <AppLink
           v-if="row.symbol"
-          :ticker="row.symbol.symbol"
+          :ticker="row.symbol.tickerName"
           class="text-sm text-gray-500 overflow-hidden overflow-ellipsis"
           to="ticker_details"
         >

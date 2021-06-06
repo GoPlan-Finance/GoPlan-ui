@@ -174,11 +174,11 @@ export default defineComponent({
     const breakpoint = ref(null)
 
     const config : TableConfig = reactive({
-      fields   : props.config.fields,
-      settings : props.config.settings || {},
-      filters  : props.config.filters || {},
-      search   : props.config.search || {},
-      tableLayout: props.config.tableLayout
+      fields      : props.config.fields,
+      settings    : props.config.settings || {},
+      filters     : props.config.filters || {},
+      search      : props.config.search || {},
+      tableLayout : props.config.tableLayout
     })
 
     const search = ref('')

@@ -27,6 +27,15 @@
         </div>
 
         <navigation-item
+          title="Analytics"
+          to="/analytics"
+        >
+          <ChartBarIcon
+            class="h-5 w-5"
+          />
+        </navigation-item>
+
+        <navigation-item
           title="Holdings"
           to="/holdings"
         >
@@ -69,14 +78,15 @@
 </template>
 
 <script lang="ts">
+import GoPlanLogo from '/@components/base/GoPlanLogo.vue'
+import { ChartBarIcon } from '@heroicons/vue/outline'
 import { defineComponent } from 'vue'
 import { useSidebar } from '../hooks/useSidebar'
-import GoPlanLogo from '/@components/base/GoPlanLogo.vue'
 import NavigationItem from './NavigationItem.vue'
 
 
 export default defineComponent({
-  components: {GoPlanLogo, NavigationItem},
+  components: {GoPlanLogo, NavigationItem, ChartBarIcon},
   setup () {
     const {isOpen} = useSidebar()
 

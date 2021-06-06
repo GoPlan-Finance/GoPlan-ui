@@ -2,16 +2,15 @@ import { AssetSymbol, Holding } from '.'
 import { SecureObject } from './base/SecureObject'
 
 
-export class HoldingHistory extends SecureObject {
+export class HoldingTimeSeries extends SecureObject {
 
-  static className = 'HoldingHistory'
+  static className = 'HoldingTimeSeries'
 
 
   constructor () {
-    super(HoldingHistory.className, [
+    super(HoldingTimeSeries.className, [
       'low',
       'high',
-
       'open',
       'close',
 
@@ -25,27 +24,6 @@ export class HoldingHistory extends SecureObject {
 
   set holding (value : Holding) {
     this.set('holding', value)
-  }
-
-  get symbol () : AssetSymbol {
-    return this.get('symbol')
-  }
-
-  set symbol (value : AssetSymbol) {
-    this.set('symbol', value)
-  }
-
-  get symbolName () : string {
-
-    if (this.symbol && this.symbol.tickerName) {
-      return this.symbol.tickerName
-    }
-
-    return this.get('symbolName')
-  }
-
-  set symbolName (value : string) {
-    this.set('symbolName', value)
   }
 
   get currency () : string {
@@ -70,14 +48,6 @@ export class HoldingHistory extends SecureObject {
 
   set startAt (value : Date) {
     this.set('startAt', value)
-  }
-
-  get endAt () : Date {
-    return this.get('endAt')
-  }
-
-  set endAt (value : Date) {
-    this.set('endAt', value)
   }
 
   get period () : string {
@@ -142,4 +112,4 @@ export class HoldingHistory extends SecureObject {
 }
 
 
-HoldingHistory.register()
+HoldingTimeSeries.register()

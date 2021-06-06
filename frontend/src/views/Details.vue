@@ -7,7 +7,7 @@
             {{ assetSymbol.name }}
           </div>
           <div class="text-base text-gray-500 font-medium">
-            {{ assetSymbol.symbol.toUpperCase() }}
+            {{ assetSymbol.tickerName }}
           </div>
         </div>
       </template>

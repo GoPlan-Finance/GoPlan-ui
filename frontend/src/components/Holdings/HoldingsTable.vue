@@ -1,4 +1,5 @@
 <template>
+  {{ totalOpen }}
   <DataTable
     :config="config"
     :rows="rows"
@@ -84,12 +85,14 @@
 <script lang="ts">
 
 import { Holding } from '/@common/models/Holding'
+import { ArrayUtils } from '/@common/utils'
+import AssetPriceChange from '/@components/AssetPriceChange.vue'
 import PriceChange from '/@components/PriceChange.vue'
 import { RangeValue, TableLayout, TableRow } from '/@components/DataTable'
 import DataTable from '/@components/DataTable.vue'
 import AppLink from '/@components/router/AppLink.vue'
 import * as dayjs from 'dayjs'
-import { defineComponent, PropType, reactive, ref, toRefs } from 'vue'
+import { computed, defineComponent, PropType, reactive, toRefs } from 'vue'
 
 
 export default defineComponent({
@@ -109,9 +112,9 @@ export default defineComponent({
     },
   },
   setup (props) {
-    const totalOpen = ref(0)
+    const totalOpen = computed(() => ArrayUtils.sum<Holding>(props.rows, elem => elem.openTotalPrice))
 
-    const data = reactive({
+    const data      = reactive({
       config: {
         fields: {
           name: {
@@ -233,6 +236,7 @@ export default defineComponent({
             format  : 'percent',
             justify : 'right',
             value   : (row : Holding) => {
+              // @todo currency
               return totalOpen.value === 0 ? 0 : ((row.openQty * row.openAvgPrice) / totalOpen.value)
             },
           },
@@ -268,6 +272,7 @@ export default defineComponent({
 
     return {
       ...toRefs(data),
+      totalOpen,
       dayjs,
     }
   },

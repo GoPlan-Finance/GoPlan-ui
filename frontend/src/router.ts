@@ -12,6 +12,7 @@ import Styleguide from '/@styleguide/views/Styleguide.vue'
 import StyleguideDetail from '/@styleguide/views/StyleguideDetail.vue'
 import Tables from '/@styleguide/views/Tables.vue'
 import UIElements from '/@styleguide/views/UIElements.vue'
+import Analytics from '/@views/Analytics.vue'
 import Details from '/@views/Details.vue'
 import NotFound from '/@views/Error404.vue'
 import Holdings from '/@views/Holdings.vue'
@@ -61,6 +62,13 @@ const appRoutes : RouteRecordRaw[] = [
     props     : true,
     component : Holdings,
   },
+  {
+    path      : '/analytics',
+    name      : 'analytics',
+    props     : true,
+    component : Analytics,
+  },
+
   {
     path      : '/details/:ticker',
     name      : 'ticker_details',

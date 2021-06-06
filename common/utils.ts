@@ -9,9 +9,10 @@ export function sleep (ms : number) : Promise<void> {
 export type StringKeys<T> = Extract<keyof T, string>;
 
 
-export const processBatch = async <T, U> (
-  data : Array<T>, func : (elem : T) => U,
-  statusFunc : (curIndex : number, len : number, result : U) => boolean | undefined | null,
+export const processBatch = async <T, U = void> (
+  data : Array<T>,
+  func : (elem : T) => U | Promise<U>,
+  statusFunc : (curIndex : number, len : number, result : U) => (boolean | undefined | null | Promise<void> | Promise<boolean>) = null,
   nbParallel = 8,
 ) : Promise<U[]> => {
 
@@ -77,7 +78,7 @@ export function hideZero (num : number) : string {
   return num === 0 ? '' : num.toString()
 }
 
-export function padDecimals (num : number, minDec = 0, maxDec = 4) :string {
+export function padDecimals (num : number, minDec = 0, maxDec = 4) : string {
 
   // decimal part, without trailing 00
   // 1.000 ->  ''
@@ -176,6 +177,20 @@ export class ArrayUtils {
     }))
   }
 
+
+  public static unique<T> (array : T[]) : T[] {
+    return array.filter((value, index, self) => {
+      return self.indexOf(value) === index
+    })
+  }
+
+  public static fill<T> (len :number, value: T) {
+    return (new Array(len)).fill(value)
+  }
+
+  public static sum<T> (arr  : T [], cb : (item : T) => number) : number {
+    return arr.reduce((result, current) => result + cb(current), 0)
+  }
 
 }
 

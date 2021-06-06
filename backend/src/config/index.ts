@@ -47,7 +47,7 @@ const config = convict({
         env     : 'HTTP_PORT',
         arg     : 'httpPort',
       },
-    },    
+    },
   },
   parse: {
     databaseUri: {
@@ -89,7 +89,7 @@ const config = convict({
       name: {
         doc    : 'Provider Name',
         format : [
-          'fmp', 'finhub', 'tiingo', 'twelveData', 'alphaVantage', 'yahoo',
+          'eod', /* 'fmp','finhub', 'tiingo', 'twelveData', 'alphaVantage', 'yahoo'*/
         ],
         default: null,
       },

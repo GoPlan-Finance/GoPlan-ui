@@ -1,7 +1,7 @@
-import { requiresAuthentication, schema } from './base/defaults'
+import { Migrations } from 'parse-server'
 
 
-export default schema('AssetAddressRegion', {
+export default Migrations.makeSchema('AssetAddressRegion', {
   fields: {
     // parentRegion: {type: 'Pointer', targetClass: 'AssetAddressRegion', required: false},
 
@@ -13,7 +13,7 @@ export default schema('AssetAddressRegion', {
     state   : {state: 1},
   },
   classLevelPermissions: {
-    ...requiresAuthentication([
+    ...Migrations.requiresAuthentication([
       'find', 'get', 'count',
     ]),
   },

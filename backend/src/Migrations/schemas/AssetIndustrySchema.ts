@@ -1,7 +1,7 @@
-import { requiresAuthentication, schema } from './base/defaults'
+import { Migrations } from 'parse-server'
 
 
-export default schema('AssetSector', {
+export default Migrations.makeSchema('AssetIndustry', {
   fields: {
     name: {type: 'String'},
   },
@@ -9,7 +9,7 @@ export default schema('AssetSector', {
     name: {name: 1},
   },
   classLevelPermissions: {
-    ...requiresAuthentication([
+    ...Migrations.requiresAuthentication([
       'find', 'get', 'count',
     ]),
   },

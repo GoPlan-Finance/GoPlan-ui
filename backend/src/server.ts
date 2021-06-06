@@ -10,19 +10,15 @@ import * as http from 'http'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { ParseServer } from 'parse-server'
+import { Migrations, ParseServer } from 'parse-server'
 import userConfig from '../config/config'
 
 // Load environment dependent configuration
 //const env = config.get('env');
 import defaultConfig from '../config/config.defaults'
 import { ProviderConfigInterface } from './cloud/DataProviders/providers'
-
-import liveQueryClassNames from './schema/liveQuery'
-
-
 import config from './config'
-import { makeSchemas } from './schema'
+import { schemas } from './Migrations/schemas'
 
 
 config.load({
@@ -55,17 +51,26 @@ const parseConfig = {
   },
   allowClientClassCreation : false,
   databaseURI              : config.get('parse.databaseUri'),
-  cloud                    : `${__dirname}/cloud/main.js`,
+  cloud                    : `${__dirname}/cloud/main.ts`,
   appId                    : config.get('parse.appId'),
   masterKey                : config.get('parse.masterKey') as string,
   serverURL                : config.get('parse.serverUrl'), // Don't forget to change to https if needed
   liveQuery                : {
-    classNames: liveQueryClassNames, // List of classes to support for query subscriptions
+    classNames: [ // List of classes to support for query subscriptions
+      'Watchlist',
+      'WatchlistItem',
+      'AssetSymbol',
+      'AssetProfile',
+      'Transaction',
+      'Holding',
+      'AssetPrice',
+      // '',
+      // '',
+    ],
   },
   serverStartComplete: async () => {
-
     console.log('Running Migrations')
-    await makeSchemas()
+    await Migrations.runMigrations(schemas)
     console.log('Running Migrations ... Done')
   },
 }

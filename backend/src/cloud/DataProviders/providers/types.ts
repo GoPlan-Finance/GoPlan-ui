@@ -8,10 +8,21 @@ import { Mutex } from 'async-mutex'
 import { Dayjs } from 'dayjs'
 
 
+export interface Exchange {
+  code : string;
+  name : string;
+  country : string;
+  currency : string;
+}
+
+
 export interface AssetSymbol {
   name : string,
   symbol : string,
   exchange : string,
+  currency? : string,
+  ISIN? : string,
+  type? : string,
 }
 
 
@@ -82,43 +93,43 @@ export interface CompanyProfile {
    * @type {number}
    * @memberof CompanyProfile
    */
-  price : number;
+  // price : number;
   /**
    *
    * @type {number}
    * @memberof CompanyProfile
    */
-  beta? : number;
+  // beta? : number;
   /**
    *
    * @type {number}
    * @memberof CompanyProfile
    */
-  volAvg? : number;
+  // volAvg? : number;
   /**
    *
    * @type {number}
    * @memberof CompanyProfile
    */
-  mktCap? : number;
+  // mktCap? : number;
   /**
    *
    * @type {number}
    * @memberof CompanyProfile
    */
-  lastDiv? : number;
+  // lastDiv? : number;
   /**
    *
    * @type {string}
    * @memberof CompanyProfile
    */
-  range? : string;
+  // range? : string;
   /**
    *
    * @type {number}
    * @memberof CompanyProfile
    */
-  changes? : number;
+  // changes? : number;
   /**
    *
    * @type {string}
@@ -148,13 +159,13 @@ export interface CompanyProfile {
    * @type {string}
    * @memberof CompanyProfile
    */
-  exchange : string;
+  exchangeCode : string;
   /**
    *
    * @type {string}
    * @memberof CompanyProfile
    */
-  exchangeShortName : string;
+  // exchangeShortName : string;
   /**
    *
    * @type {string}
@@ -178,7 +189,7 @@ export interface CompanyProfile {
    * @type {string}
    * @memberof CompanyProfile
    */
-  ceo? : string;
+  // ceo? : string;
   /**
    *
    * @type {string}
@@ -232,13 +243,13 @@ export interface CompanyProfile {
    * @type {number}
    * @memberof CompanyProfile
    */
-  dcfDiff? : number;
+  // dcfDiff? : number;
   /**
    *
    * @type {number}
    * @memberof CompanyProfile
    */
-  dcf? : number;
+  // dcf? : number;
   /**
    *
    * @type {string}
@@ -490,9 +501,11 @@ export interface DataProviderInterface {
 
   name () : string
 
+  fetchSupportedExchanges () : Promise<Array<Exchange>>
 
-  fetchSupportedSymbols () : Promise<Array<AssetSymbol>>
+  fetchSupportedSymbols (exchangeCode ? : string) : Promise<Array<AssetSymbol>>
 
+  searchSymbols (query : string) : Promise<Array<AssetSymbol>>
 
   fetchSymbolTimeSeriesData? (
     symbol : string,
@@ -516,8 +529,6 @@ export interface DataProviderInterface {
     symbols : string[],
   ) : Promise<CompanyQuote[]>
 
-
-  test1234? () : void
 
 }
 

@@ -1,7 +1,7 @@
-import { requiresAnonymous, requiresAuthentication, schema } from './base/defaults'
+import { Migrations } from 'parse-server'
 
 
-export default schema('_User', {
+export default Migrations.makeSchema('_User', {
   fields: {
     email         : {type: 'String'},
     authData      : {type: 'Object'},
@@ -15,11 +15,11 @@ export default schema('_User', {
   },
   indexes               : {},
   classLevelPermissions : {
-    ...requiresAuthentication([
+    ...Migrations.requiresAuthentication([
       'update',
     ]),
 
-    ...requiresAnonymous([
+    ...Migrations.requiresAnonymous([
       'create',
     ]),
 
