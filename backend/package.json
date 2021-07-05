@@ -59,7 +59,7 @@
     "babel-watch": "7.4.1",
     "bluebird": "3.7.2",
     "concurrently": "^6.1.0",
-    "eslint": "^7.28.0",
+    "eslint": "^7.30.0",
     "eslint-config-standard": "16.0.2",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-node": "11.1.0",
