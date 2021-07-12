@@ -36,7 +36,7 @@
     "feather-icons": "^4.28.0",
     "papaparse": "^5.3.1",
     "parse": "^3.2.0",
-    "pinia": "^2.0.0-beta.2",
+    "pinia": "^2.0.0-beta.5",
     "tailwindcss": "^2.1.4",
     "ts-money": "^0.4.6",
     "vue": "^3.1.1",
